@@ -75,12 +75,14 @@ WSGI_APPLICATION = 'courseapis.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+#Cau hinh DBMS - MySQL
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'coursedb',
         'USER': 'root',
-        'PASSWORD': 'root',
+        #'PASSWORD': 'root',        # note: school MySQL password
+        'PASSWORD': 'P@ssw0rd',     # note: home MySQL password
         'HOST': ''  # mặc định localhost
     }
 }
