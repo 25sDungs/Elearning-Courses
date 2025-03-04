@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'courses.apps.CoursesConfig',
     'ckeditor',
-    'ckeditor_uploader',
+    'ckeditor_uploader'
 ]
 
 MIDDLEWARE = [
@@ -75,14 +75,14 @@ WSGI_APPLICATION = 'courseapis.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-#Cau hinh DBMS - MySQL
+# Cau hinh DBMS - MySQL
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'coursedb',
         'USER': 'root',
-        #'PASSWORD': 'root',        # note: school MySQL password
-        'PASSWORD': 'P@ssw0rd',     # note: home MySQL password
+        # 'PASSWORD': 'root',        # note: school MySQL password
+        'PASSWORD': 'P@ssw0rd',  # note: home MySQL password
         'HOST': ''  # mặc định localhost
     }
 }
@@ -91,9 +91,10 @@ import pymysql
 
 pymysql.install_as_MySQLdb()
 
-AUTH_USER_MODEL = 'courses.User'
 MEDIA_ROOT = '%s/courses/static/' % BASE_DIR
+# Cấu Hình CKeditor thư mục lessons nên courses không thể upload ảnh trong description (RichTextField)
 CKEDITOR_UPLOAD_PATH = "images/lessons/"
+AUTH_USER_MODEL = 'courses.User'
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 

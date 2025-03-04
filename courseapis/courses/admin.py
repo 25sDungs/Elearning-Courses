@@ -17,15 +17,15 @@ class LessonFrom(forms.ModelForm):
 
 
 # Register your models here.
-class MyLesson(admin.ModelAdmin):
+class MyLessonAdmin(admin.ModelAdmin):
     list_display = ['id', 'subject', 'created_date', 'course']
     list_filter = ['subject']
     readonly_fields = ['image_view']
     form = LessonFrom
 
-    @staticmethod
     def image_view(self, lesson):
-        return mark_safe(f'<img src="/static/{lesson.image.name}" width="120" />')
+        if lesson:
+            return mark_safe(f'<img src="/static/{lesson.image.name}" width="120" />')
 
     class Media:
         css = {
@@ -47,18 +47,18 @@ class MyAdminSite(admin.AdminSite):
         })
 
 
-class MyCourse(admin.ModelAdmin):
+class MyCourseAdmin(admin.ModelAdmin):
     list_display = ['subject', 'image_view', 'created_date']
     readonly_fields = ['image_view']
 
-    @staticmethod
     def image_view(self, courses):
-        return mark_safe(f'<img src="/static/{courses.image.name}" width="120" />')
+        if courses:
+            return mark_safe(f'<img src="/static/{courses.image.name}" width="120" />')
 
 
 admin_site = MyAdminSite(name="eCourse")
 
 admin_site.register(Category)
-admin_site.register(Course, MyCourse)
-admin_site.register(Lesson, MyLesson)
+admin_site.register(Course, MyCourseAdmin)
+admin_site.register(Lesson, MyLessonAdmin)
 admin_site.register(Tag)
