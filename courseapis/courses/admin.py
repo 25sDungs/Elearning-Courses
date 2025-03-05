@@ -25,7 +25,8 @@ class MyLessonAdmin(admin.ModelAdmin):
 
     def image_view(self, lesson):
         if lesson:
-            return mark_safe(f'<img src="/static/{lesson.image.name}" width="120" />')
+            return mark_safe(f'<img src="{lesson.image.url}" width="120" />')  # Địa chỉ ảnh Cloudinary
+            # return mark_safe(f'<img src="/static/{lesson.image.name}" width="120" />')        # Địa chỉ ảnh local
 
     class Media:
         css = {
@@ -53,7 +54,7 @@ class MyCourseAdmin(admin.ModelAdmin):
 
     def image_view(self, courses):
         if courses:
-            return mark_safe(f'<img src="/static/{courses.image.name}" width="120" />')
+            return mark_safe(f'<img src="{courses.image.url}" width="120" />')  # Địa chỉ ảnh Cloudinary
 
 
 admin_site = MyAdminSite(name="eCourse")

@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'courses.apps.CoursesConfig',
     'ckeditor',
-    'ckeditor_uploader'
+    'ckeditor_uploader',
+    'rest_framework',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
@@ -81,8 +83,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'coursedb',
         'USER': 'root',
-        # 'PASSWORD': 'root',        # note: school MySQL password
-        'PASSWORD': 'P@ssw0rd',  # note: home MySQL password
+        'PASSWORD': 'root',  # note: school MySQL password
+        # 'PASSWORD': 'P@ssw0rd',  # note: home MySQL password
         'HOST': ''  # mặc định localhost
     }
 }
@@ -133,3 +135,15 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+import cloudinary
+import cloudinary.uploader
+from cloudinary.utils import cloudinary_url
+
+# Configuration
+cloudinary.config(
+    cloud_name="da6hbd0o7",
+    api_key="981679221813865",
+    api_secret="eFbqe5Rs60p-p2nIzDxfZIImBqA",
+    secure=True
+)
