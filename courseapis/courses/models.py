@@ -52,3 +52,27 @@ class Tag(BaseModel):
 
     def __str__(self):
         return self.name
+
+
+# Lưu trữ thông tin Tương Tác (Interaction) giữa người dùng và bài học
+class Interaction(BaseModel):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
+
+    class Meta:
+        abstract = True
+
+
+# Người dùng Tương Tác (Interact) với bài học bằng Comment
+class Comment(Interaction):
+    content = models.CharField(max_length=255, null=False)
+
+    def __str__(self):
+        return self.content
+
+
+# Người dùng Tương Tác (Interact) Thích với bài học
+class Like(Interaction):
+    class Meta:
+        # Mỗi người chỉ thích bài học 1 lần
+        unique_together = ('user', 'lesson')

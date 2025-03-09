@@ -1,4 +1,4 @@
-from courses.models import Category, Lesson, Course, Tag
+from courses.models import Category, Lesson, Course, Tag, Comment, User
 from rest_framework import serializers
 
 
@@ -39,4 +39,21 @@ class LessonDetailSerializer(LessonSerializer):
 
     class Meta:
         model = LessonSerializer.Meta.model  # Kế thừa meta từ lớp cha
-        fields = LessonSerializer.Meta.fields + ['content', 'tags']
+        fields = LessonSerializer.Meta.fields + ['content', 'tags']  # Thêm 2 trường thuộc tính từ lớp cha
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'username', 'password', 'avatar']
+        extra_kwargs = {
+            'password': {
+                'write_only': True
+            }
+        }
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ['id', 'content', 'created_date', 'updated_date', 'user']
