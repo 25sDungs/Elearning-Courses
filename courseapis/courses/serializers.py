@@ -52,8 +52,21 @@ class UserSerializer(serializers.ModelSerializer):
             }
         }
 
+    def create(self, validated_data):
+        data = validated_data.copy()
+        u = User(**data)
+        u.set_password(u.password)
+        u.save()
+        return u
+
+    def to_representation(self, instance):
+        d = super().to_representation(instance)
+        d['avatar'] = instance.image.url
+        return d
+
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields = ['id', 'content', 'created_date', 'updated_date', 'user']
+        # update_date not updated_date
+        fields = ['id', 'content', 'created_date', 'update_date', 'user']
