@@ -3,7 +3,7 @@ from rest_framework.response import Response
 
 from courses.models import Category, Course, Lesson, User
 from courses import serializers, paginators
-from rest_framework import viewsets, generics, parsers
+from rest_framework import viewsets, generics, parsers, status
 
 
 class CategoryViewSet(viewsets.ViewSet, generics.ListAPIView):
@@ -16,23 +16,29 @@ class CourseViewSet(viewsets.ViewSet, generics.ListAPIView):
     serializer_class = serializers.CourseSerializer
     pagination_class = paginators.CoursePagination
 
+    # ghi đè queryset
     def get_queryset(self):
-        queries = self.queryset
+        query = self.queryset
 
-        q = self.request.query_params.get("q")
-        if q:
-            queries = queries.filter(subject__icontains=q)
+        if self.action.__eq__('list'):
+            # Thuộc tính request nằm trong self
+            q = self.request.query_params.get("q")
+            if q:
+                query = query.filter(subject__icontains=q)
 
-        cate_id = self.request.query_params.get("category_id")
-        if cate_id:
-            queries = queries.filter(category_id=cate_id)
+            cate_id = self.request.query_params.get("category_id")
+            if cate_id:
+                query = query.filter(category_id=cate_id)
 
-        return queries
+        return query
 
     @action(methods=['get'], url_path='lessons', detail=True)
     def get_lessons(self, request, pk):
         lessons = self.get_object().lesson_set.filter(active=True)
-        return Response(serializers.LessonSerializer(lessons, many=True).data)
+        q = request.query_params.get('q')
+        if q:
+            lessons = lessons.filter(subject__icontains=q)
+        return Response(serializers.LessonSerializer(lessons, many=True).data, status=status.HTTP_200_OK)
 
 
 class LessonViewSet(viewsets.ViewSet, generics.RetrieveAPIView):
@@ -45,7 +51,6 @@ class LessonViewSet(viewsets.ViewSet, generics.RetrieveAPIView):
         return Response(serializers.CommentSerializer(comments, many=True).data)
 
 
-# API Created
 class UserViewSet(viewsets.ViewSet, generics.CreateAPIView):
     queryset = User.objects.filter(is_active=True)
     serializer_class = serializers.UserSerializer

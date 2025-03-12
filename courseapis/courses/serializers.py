@@ -8,7 +8,7 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = ['id', 'name']
 
 
-# hiển thị địa chỉ đường dẫn image từ clouad
+# hiển thị địa chỉ đường dẫn image từ cloudinary
 class BaseSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         d = super().to_representation(instance)
@@ -19,7 +19,9 @@ class BaseSerializer(serializers.ModelSerializer):
 class CourseSerializer(BaseSerializer):
     class Meta:
         model = Course
-        fields = ['id', 'subject', 'created_date', 'category_id', 'image']
+        # lấy trường category_id ko lấy category để tránh phải kết các bảng
+        # Không sử dụng category__id
+        fields = ['id', 'subject', 'image', 'created_date', 'category_id']
 
 
 class LessonSerializer(BaseSerializer):
@@ -38,7 +40,7 @@ class LessonDetailSerializer(LessonSerializer):
     tags = TagSerializer(many=True)
 
     class Meta:
-        model = LessonSerializer.Meta.model  # Kế thừa meta từ lớp cha
+        model = LessonSerializer.Meta.model  # Kế thừa meta.model từ lớp cha
         fields = LessonSerializer.Meta.fields + ['content', 'tags']  # Thêm 2 trường thuộc tính từ lớp cha
 
 
@@ -61,7 +63,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         d = super().to_representation(instance)
-        d['avatar'] = instance.image.url
+        d['avatar'] = instance.avatar.url
         return d
 
 
