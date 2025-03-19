@@ -42,7 +42,14 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'rest_framework',
     'drf_yasg',
+    'oauth2_provider',
+
 ]
+
+REST_FRAMEWORK = {
+    # Tuple chứa nhiều dữ liệu thiếu dấu "," => Sai
+    'DEFAULT_AUTHENTICATION_CLASSES': ('oauth2_provider.contrib.rest_framework.OAuth2Authentication',)
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -147,3 +154,8 @@ cloudinary.config(
     api_secret="eFbqe5Rs60p-p2nIzDxfZIImBqA",
     secure=True
 )
+
+OAUTH2_PROVIDER = {'OAUTH2_BACKEND_CLASS': 'oauth2_provider.oauth2_backends.JSONOAuthLibCore'}
+
+CLIENT_ID = 'p5TJUciC1RSBpnirwx5LAa7CdIWuIYkW3ayqetcx'
+CLIENT_SECRET = 'WFuBduuSwaCKikKvDJr9JiJOC8oF8W7NH1LN0qeYH8WIDisQbbZW1D0iHUUmmu0zxuUGO9Jjbx78GpMAazCDKUXYuQTzLsivD0rThZpkzJviqWUTsYUxlq0mZwB9vGGg'

@@ -38,10 +38,21 @@ class TagSerializer(serializers.ModelSerializer):
 
 class LessonDetailSerializer(LessonSerializer):
     tags = TagSerializer(many=True)
+    liked = serializers.SerializerMethodField()
+
+    def get_liked(self, lesson):
+        request = self.context.get('request')
+        if request and request.user.is_authenticated:
+            return lesson.like_set.filter(user=request.user, active=True).exists()
+
+        return None
 
     class Meta:
         model = LessonSerializer.Meta.model  # Kế thừa meta.model từ lớp cha
-        fields = LessonSerializer.Meta.fields + ['content', 'tags']  # Thêm 2 trường thuộc tính từ lớp cha
+        fields = LessonSerializer.Meta.fields + ['content', 'tags', 'liked']  # Thêm 2 trường thuộc tính từ lớp cha
+
+
+# class AuthenticatedLessonDetailsSerializer(LessonDetailSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -61,14 +72,32 @@ class UserSerializer(serializers.ModelSerializer):
         u.save()
         return u
 
+    def update(self, instance, validated_data):
+        if 'password' in validated_data:
+            instance.set_password(validated_data['password'])
+            instance.save()
+
+        return instance
+
     def to_representation(self, instance):
         d = super().to_representation(instance)
-        d['avatar'] = instance.avatar.url
+        d['avatar'] = instance.avatar.url if instance.avatar else ''
         return d
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['user'] = UserSerializer(instance.user).data
+        return data
+
     class Meta:
         model = Comment
-        # update_date not updated_date
-        fields = ['id', 'content', 'created_date', 'update_date', 'user']
+        # Thuộc tính update_date thay cho updated_date
+        fields = ['id', 'content', 'created_date', 'update_date', 'user', 'lesson']
+
+
+class PostCommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ['id', 'content']
