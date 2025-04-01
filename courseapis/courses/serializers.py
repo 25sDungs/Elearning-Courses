@@ -58,10 +58,10 @@ class LessonDetailSerializer(LessonSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'username', 'password', 'avatar']
+        fields = ['avatar', 'first_name', 'last_name', 'username', 'password', 'email']
         extra_kwargs = {
             'password': {
-                'write_only': True
+                'write_only': True  # => password chỉ có thể ghi, ko read => ko trả về trường password
             }
         }
 
@@ -76,7 +76,6 @@ class UserSerializer(serializers.ModelSerializer):
         if 'password' in validated_data:
             instance.set_password(validated_data['password'])
             instance.save()
-
         return instance
 
     def to_representation(self, instance):
@@ -93,8 +92,13 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        # Thuộc tính update_date thay cho updated_date
+        # updated_date không có trong bảng mà là thuộc tính update_date
         fields = ['id', 'content', 'created_date', 'update_date', 'user', 'lesson']
+        extra_kwargs = {
+            'lesson': {
+                'write_only': True
+            }
+        }
 
 
 class PostCommentSerializer(serializers.ModelSerializer):

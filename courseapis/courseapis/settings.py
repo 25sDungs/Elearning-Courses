@@ -155,7 +155,12 @@ cloudinary.config(
     secure=True
 )
 
-OAUTH2_PROVIDER = {'OAUTH2_BACKEND_CLASS': 'oauth2_provider.oauth2_backends.JSONOAuthLibCore'}
+# Remember to migrate!
+OAUTH2_PROVIDER = {
+    'OAUTH2_BACKEND_CLASS': 'oauth2_provider.oauth2_backends.JSONOAuthLibCore',
+    'GRANT_TYPES': ['password', 'authorization_code', 'client_credentials', 'refresh_token'],
+}
 
-CLIENT_ID = 'p5TJUciC1RSBpnirwx5LAa7CdIWuIYkW3ayqetcx'
-CLIENT_SECRET = 'WFuBduuSwaCKikKvDJr9JiJOC8oF8W7NH1LN0qeYH8WIDisQbbZW1D0iHUUmmu0zxuUGO9Jjbx78GpMAazCDKUXYuQTzLsivD0rThZpkzJviqWUTsYUxlq0mZwB9vGGg'
+# Chạy lại server /o/applications/ để lấy code mới?
+CLIENT_ID = 'giXElSpLDJ4o91iG0sO7YyS8GN4gfRFba0CTk8m7'
+CLIENT_SECRET = 'BJvaJXesBvxhevLBCY0EybDUAyzG8cDVkOCA3QqMqqugapUTJuZzk8Sn5tucMTpEcRcht9hLSABwiDd0gibPNgBRTyldzNGcAoTQiWLYjrVQABi6D7URtB6VmWNFyVYz'
