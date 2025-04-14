@@ -1,8 +1,12 @@
-const BASE_URL = '';
+import axios from "axios";
+const BASE_URL = 'https://thanhduong.pythonanywhere.com/';
 
-const endpoint = {
+export const endpoints = {
     'categories': '/categories/',
-    'course': '/courses/',
-
+    'courses': '/courses/'
 
 }
+
+export default axios.create({
+    baseURL: BASE_URL
+})
