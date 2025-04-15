@@ -3,6 +3,7 @@ import MyStyles from "../../styles/MyStyles";
 import { useEffect, useState } from "react";
 import { Chip, List, Searchbar } from "react-native-paper";
 import Apis, { endpoints } from "../../configs/Apis";
+import { useNavigation } from "@react-navigation/native";
 
 const Home = () => {
     const [categories, setCategories] = useState([]);
@@ -11,6 +12,7 @@ const Home = () => {
     const [kw, setKw] = useState("");
     const [page, setPage] = useState(1);
     const [cateId, setCateId] = useState(null);
+    const nav = useNavigation();
 
     const loadCate = async () => {
         let res = await Apis.get(endpoints['categories']);
@@ -86,7 +88,12 @@ const Home = () => {
             <Searchbar placeholder="Tìm kiếm khóa học" value={kw} onChangeText={t => search(t, setKw)} />
 
             {loading && <ActivityIndicator />}
-            <FlatList onEndReached={loadMore} data={courses} renderItem={({ item }) => <List.Item key={item.id} title={item.subject} description={item.created_date} left={() => <Image style={MyStyles.avatar} source={{ uri: item.image }} />} />} />
+            <FlatList onEndReached={loadMore} data={courses}
+                renderItem={({ item }) => <List.Item key={item.id}
+                    title={item.subject} description={item.created_date}
+                    left={() => <TouchableOpacity onPress={()=>nav.navigate('lesson')}>
+                                    <Image style={MyStyles.avatar} source={{ uri: item.image }} />
+                                </TouchableOpacity>} />} />
 
         </View>
     )
